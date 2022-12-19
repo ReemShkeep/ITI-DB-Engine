@@ -1,4 +1,6 @@
-DB Engine Using Bash Script (Hend Tawfek & Reem Shkeep) 
+# DB-Engine
+ Database Engine That is ideal for content management
+DB Engine Using Bash Script (#Hend Tawfek & #Reem Shkeep) 
 Introduction
 
     This project is about implementing a DBMS (Database Management System) using Bash Script language
@@ -19,7 +21,7 @@ Introduction
 
     A Menu with flexible navigation forward and backward options is presented too
 
-Project Features
+#Project Features
 - Create Database
 - List Databases
 - Drop Database
@@ -34,7 +36,7 @@ Project Features
 	    Select using primary key
     	    Delete From Table
 
-Screenshots of some Features Output:
+#Screenshots of some Features Output:
 
 
 This Work is Presented By:
