@@ -6,28 +6,50 @@ case $choice in
 "Create Database") 
 echo "Enter database name"
 read db 
-if [ -d ./datab/"$db" ]
- then
-  ### Take action if $c exists ###
-  echo $db "Database already exist :("
-else
-  ###  Control will jump here if $c does NOT exists ###
-mkdir $db
-chmod 777  $db
-cp -r $db ./datab
-echo "your new database is" $db
-fi
-;; 
+  if [ -d ./datab/"$db" ]
+  then
+    ### Take action if $c exists ###
+    echo $db "Database already exist :("
+  else
+
+
+    ###  Control will jump here if $c does NOT exists ###
+
+  mkdir $db
+  chmod 777  $db
+  cp -r $db ./datab
+  echo "your new database is" $db
+  fi
+;;
+
+
+
 " List Database") 
-ls -a ./datab
-;; 
+#ls -a ./datab
+
+    dbls=`ls -Al | grep ^d | wc -l`
+    
+    # check if this count is zero so no databses found  
+    if [ $dbls -eq 0 ]
+        then 
+            echo "No Databases found"
+    else
+        # list only directories in case there are files exist in the DBMS
+        ls -d */
+    fi
+;;
+
+
+
 "Drop Database")
 echo "Enter database name to drop"
 read ddb
-rm -R ./datab/$ddb
-echo " Droped" $ddb
+rm -IR ./datab/$ddb
+echo " Dropped" $ddb
  ;; 
+
 ###############tables into this
+
 "Connect To Database") 
 echo "Enter database name"
 read udb 
@@ -36,19 +58,28 @@ if [ -d ./datab/"$udb" ]
   ### Take action if $c exist ###
 cd ./$udb
 echo "Now you're using" $udb
+
 ##################################
+#select choice in "Create table" "List tables" "Drop table" "Insert into Table" "Select From Table" "Delete From Table" "Go to Main Menu"
+
 select choice in "Create table" " List tables" "Drop table" Exit
 do
 case $choice in 
 "Create table") 
-echo "Enter table name"
+echo "Enter the Table Name:"
 read t
 if [ -d ./"$t" ]
- then
+  then
+
   ### Take action if $c exists ###
+
   echo $t "Table already exist :("
 else
+ 
+
   ###  Control will jump here if $c does NOT exists ###
+
+
 mkdir ./$t
 chmod 777  $t
 cp -r $t ./$udb
@@ -89,6 +120,7 @@ break
 ;; 
 esac 
 done
+
 #######################################
 
 else
