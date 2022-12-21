@@ -383,7 +383,6 @@ function MainMenu {
     done
 }
 
-<<<<<<< HEAD
 function SelectFromTable {
     echo "Enter the tableName you want to select from:"
     read TableName
@@ -435,10 +434,6 @@ function SelectFromTable {
     fi
 }
 
-# change directory to the DB-engine folder, once the script runs
-=======
-# calling the main menu function and change directory to the DB-engine folder once the script runs
->>>>>>> 264ad9244b2e1cb074a00f9402c5957b04a30465
 cd DB-engine
 
 MainMenu
