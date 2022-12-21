@@ -2,6 +2,7 @@
 PS3="Please enter your choice ^^ "
 
 function CreateDatabase {
+  clear
   echo "Enter database name"
   read db
  
@@ -32,6 +33,7 @@ function CreateDatabase {
 }
 
 function ListDatabase {
+clear
   #ls -a ./datab
   dbls=`ls -Al | grep ^d | wc -l`    
       if [ $dbls -eq 0 ]
@@ -44,6 +46,7 @@ function ListDatabase {
 
 
 function CreateTable {
+clear
     echo "Enter the table name"
       read t
         if [ "$t" != "" ]
@@ -146,6 +149,7 @@ function listTables {
 }
 
 function DropTable {
+clear
     echo -e "Your current tables are : \n "
     listTables
     echo "Choose the table name you want to drop ^^: "
@@ -176,6 +180,7 @@ function DropTable {
 }
 
 function InsertIntoTable {
+clear
     echo -e "Your current tables are: \n "
     listTables 
     echo -e "please choose the table you want to insert into: \n "
@@ -265,6 +270,7 @@ function InsertIntoTable {
 }
 
 function SelectFromTable {
+clear
     echo "Enter the tableName you want to select from:"
     read TableName
     isExisted_select=0
@@ -316,6 +322,7 @@ function SelectFromTable {
 }
 
 function DeleteFromTable {
+clear
     echo -e "Your current tables are: \n "
     listTables 
     echo "Enter the table name you want to delete from:"
@@ -365,6 +372,7 @@ function DeleteFromTable {
 }
 
 function ConnectMenu {
+clear
     echo "Successfully connected to $DatabaseConnect database"
     echo "Connect Menu:"
     select choice in "Create Table" "List Tables" "Drop Table" "Insert into Table" "Select From Table" "Delete From Table" "Go to Main Menu"
@@ -384,6 +392,7 @@ function ConnectMenu {
 }
 
 function ConnectDatabase {
+clear
   echo -e "These are your databases ^^ : \n   "
   ListDatabase  
   echo "Choose the database you want to connect with ^^ "
@@ -400,6 +409,7 @@ function ConnectDatabase {
 }
 
 function DropDatabase {
+clear
   echo -e "Your databases are : \n "
   ListDatabase
   echo "choose database name you want to drop without the '/' "
@@ -420,6 +430,7 @@ function DropDatabase {
 }
 
 function MainMenu {
+clear
     echo "Main Menu:"
     select choice in "Create Database" "List Databases" "Connect to Databases" "Drop Database" "Exit"
     do    
