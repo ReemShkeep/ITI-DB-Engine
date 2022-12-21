@@ -253,8 +253,8 @@ function MainMenu {
     done
 }
 
-# change directory to the datab folder, once the script runs
-cd datab
+# change directory to the DB-engine folder, once the script runs
+cd DB-engine
 
 # calling the main menu function once the script runs 
 MainMenu
