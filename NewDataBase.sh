@@ -176,8 +176,9 @@ function DropTable {
 }
 
 function InsertIntoTable {
-    echo "please choose the table you want to insert into:"
+    echo -e "Your current tables are: \n "
     listTables 
+    echo -e "please choose the table you want to insert into: \n "
     read TableName
 
     # flags for validation
@@ -213,6 +214,10 @@ function InsertIntoTable {
                 echo "Enter the value of $fieldName field:"
                 read field
                 pK=$field
+                # rg1='[-]*'
+                # rg2='[\!@#$%^&()-+=|\["\}\{\]/?><:;\.,`~ ]*'
+
+                # if [[ "$pK"!= "$rg1"  ||  "$pK"!= "$rg2"  ||  "$pK"!= ""  ||  "$pK"!= ["'"] ]]
                 
                 if [ "$pK" != "" ]
                 then
@@ -307,7 +312,7 @@ function DropDatabase {
 
     if [ "./$ddb" = "$findDdb" ] 
         then
-        echo "type yes or no to confirm droping"
+        echo "type yes to confirm droping or no to cancel"
         rm -Ir $ddb 
         echo "you have dropped $ddb"
         
