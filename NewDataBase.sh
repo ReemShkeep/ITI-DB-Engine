@@ -198,9 +198,9 @@ function InsertIntoTable {
     then
         columnsNo=$(awk 'BEGIN{FS="|"}{
             if(NR == 1)
-            #no. of rec first line then print no. of fields how many columns  
             print NF
         }' $TableName)
+        #no. of rec first line then print no. of fields how many columns  
         
         fieldSep="|"
 
