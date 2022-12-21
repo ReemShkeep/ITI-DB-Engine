@@ -1,27 +1,34 @@
 #!/bin/bash
-PS3="Enter your choice please :)"
+PS3="Please enter your choice ^^ "
 
 function CreateDatabase {
   echo "Enter database name"
-  read db 
-  #checking not entered a null 
-
+  read db
+ 
+ #checking not entered a null 
   if [ "$db" != "" ]
   then
-    if [ -d ./datab/"$db" ]
-    then
-      ### Take action if $c exists ###
-      echo $db "Database already exist :("
+        findRes=`find -name $db 2>>/dev/null`
+
+    if [ "./$db" = "$findRes" ]
+    then echo "this database already exists "
     else
-      ###  Control will jump here if $c does NOT exists ###
     mkdir $db
-    chmod 777  $db
-    cp -r $db ./datab
     echo " database is created successfully, your new database is" $db
     fi
   else echo "Enter a proper name for the database"
-      fi
-  
+  fi
+
+
+    # if [ -d ./datab/"$db" ]
+    # then
+    #   ### Take action if $c exists ###
+    #   echo $db "Database already exist :"
+    # else
+    #   ###  Control will jump here if $c does NOT exists ###
+    # mkdir $db
+    # chmod 777  $db
+    # cp -r $db ./datab
 }
 
 function ListDatabase {
@@ -35,8 +42,9 @@ function ListDatabase {
       fi
 }
 
+
 function CreateTable {
-    echo "Enter table name"
+    echo "Enter the table name"
       read t
         if [ "$t" != "" ]
     then
@@ -56,7 +64,7 @@ function CreateTable {
             fi
         done
 
-        if [ $isExist -ne 1 ]
+        if [ $tisExist -ne 1 ]
         then
             echo "Enter the number of columns:"
             read no_cols
@@ -76,7 +84,7 @@ function CreateTable {
                         if [ "$fieldN" != "" ]
                         then
                             # concatenate the first field with the separator
-                            fieldFullName=$fieldN$fieldSep
+                            header=$fieldN$fieldSep
                         else 
                             tnotValid=1
                             break
@@ -93,9 +101,9 @@ function CreateTable {
                             # check if the loop is the last one to prevent the concatenation of separator
                             if [ $i -eq $no_cols ]
                             then
-                                fieldFullName=$fieldFullName$fieldN
+                                header=$header$fieldN
                             else
-                                fieldFullName=$fieldFullName$fieldN$fieldSep
+                                header=$header$fieldN$fieldSep
                             fi
                         else 
                             tnotValid=1
@@ -108,11 +116,11 @@ function CreateTable {
                 if [ $tnotValid -ne 1 ]
                 then
                     touch $t
-                    echo $fieldFullName >> $t
+                    echo $header >> $t
                     echo "$t table is created successfully"
                  
-                    # assign empty value to fieldFullName variable to hold the new table meta-data
-                    fieldFullName="" 
+                    # assign empty value to header variable to hold the new table meta-data
+                    header="" 
                 else
                     echo "Columns' names can't be null values"
                 fi
@@ -128,7 +136,6 @@ function CreateTable {
 
 function listTables {
      #ls -a ./$udb
-      #m7tagen yb2u functions 3shan variable w if 
       listing=`ls -Al | grep ^- | wc -l`
       
       if [ $listing -eq 0 ]
@@ -139,12 +146,14 @@ function listTables {
 }
 
 function DropTable {
-    echo "Enter table name you want to drop"
+    echo -e "Your current tables are : \n "
+    listTables
+    echo "Choose the table name you want to drop ^^: "
     read dt
     # rm -R ./$udb/$dt
     # echo " Droped" $dt
 
-      isExist=0
+      isExistdrop=0
 
       dropT_arr=(`ls -Al | grep ^-`)
       
@@ -152,11 +161,11 @@ function DropTable {
       do  
           if [ "${dropT_arr[i-1]}" = "$dt" ]
           then
-              isExisted_drop=1
+              isExistdrop=1
           fi
       done
 
-      if [ $isExisted -eq 1 ]
+      if [ $isExistdrop -eq 1 ]
       then
           rm $dt 
           echo "$dt table is dropped successfully"
@@ -165,6 +174,11 @@ function DropTable {
       fi
       
 }
+
+
+
+
+
 
 function ConnectMenu {
     echo "Successfully connected to $DatabaseConnect database"
@@ -186,7 +200,9 @@ function ConnectMenu {
 }
 
 function ConnectDatabase {
-  echo "Enter database name you want to connect with ^^ "
+  echo -e "These are your databases ^^ : \n   "
+  ListDatabase  
+  echo "Choose the database you want to connect with ^^ "
   read udb 
   findUdb=`find -name $udb 2>>/dev/null`
 
@@ -197,18 +213,22 @@ function ConnectDatabase {
     else
         echo "This database doesn't exist"
     fi
-
 }
 
 function DropDatabase {
-  echo "Enter database name you want to drop"
-  read ddb
+  echo -e "Your databases are : \n "
+  ListDatabase
+  echo "choose database name you want to drop without the '/' "
+  read ddb 
+  
   findDdb=`find -name $ddb 2>>/dev/null`
 
     if [ "./$ddb" = "$findDdb" ] 
         then
-        echo "print yes or no to confirm droping"
-        rm -Ir $ddb  
+        echo "type yes or no to confirm droping"
+        rm -Ir $ddb 
+        echo "you have dropped $ddb"
+        
     else
         echo "This database doesn't exist"
     fi
