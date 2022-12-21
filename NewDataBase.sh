@@ -264,8 +264,54 @@ function InsertIntoTable {
     fi
 }
 
+function DeleteFromTable {
+    echo -e "Your current tables are: \n "
+    listTables 
+    echo "Enter the table name you want to delete from:"
+    read TableName
 
+    # flag for validation
+    isExisted_delete=0  
 
+    deleteT_arr=(`ls -Al | grep ^-`)
+
+    for i in $(seq 1 ${#deleteT_arr[@]})
+    do  
+        if [ "${deleteT_arr[i-1]}" = "$TableName" ]
+        then 
+            isExisted_delete=1
+        fi
+    done
+
+    if [ $isExisted_delete -eq 1 ]
+    then
+        echo "Enter the primary key value of the record you want to delete:"
+        read pK
+
+        # check if the input is null or has value 
+        if [ ! -z $pK ]
+        then
+          if [ "$pK" = "`awk -F "|" '{NF=1; print $1}' $TableName | grep "\b$pK\b"`" ]
+            then
+                
+                # get the record number using awk 
+                NR=`awk 'BEGIN{FS="|"}{if ($1=="'$pK'") print NR}' $TableName`
+                
+                # delete the selected record using sed
+                # -i : to edit files in place 
+                sed -i ''$NR'd' $TableName
+                
+                echo "Record deleted successfully"
+            else
+                echo "This Primary key doesn't exist"
+            fi
+        else
+            echo "The primary key can't be null"
+        fi    
+    else
+        echo "This table doesn't exist"
+    fi
+}
 
 function ConnectMenu {
     echo "Successfully connected to $DatabaseConnect database"
@@ -320,9 +366,6 @@ function DropDatabase {
         echo "This database doesn't exist"
     fi
 
-  # rm -R ./datab/$ddb
-  # echo " Droped" $ddb
-
 }
 
 function MainMenu {
@@ -340,10 +383,9 @@ function MainMenu {
     done
 }
 
-# change directory to the DB-engine folder, once the script runs
+# calling the main menu function and change directory to the DB-engine folder once the script runs
 cd DB-engine
 
-# calling the main menu function once the script runs 
 MainMenu
 
 
