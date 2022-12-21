@@ -175,7 +175,89 @@ function DropTable {
       
 }
 
+function InsertIntoTable {
+    echo "please choose the table you want to insert into:"
+    listTables 
+    read TableName
 
+    # flags for validation
+    isExisted_insert=0
+    notValidInsertion=0
+
+    InsertT_arr=(`ls -Al | grep ^-`)
+
+    for i in $(seq 1 ${#InsertT_arr[@]})
+    do  
+        if [ "${InsertT_arr[i-1]}" = "$TableName" ]
+        then 
+            isExisted_insert=1
+        fi
+    done
+
+    if [ $isExisted_insert -eq 1 ]
+    then
+        columnsNo=$(awk 'BEGIN{FS="|"}{
+            if(NR == 1)
+            #no. of rec first line then print no. of fields how many columns  
+            print NF
+        }' $TableName)
+        
+        fieldSep="|"
+
+        for i in $(seq $columnsNo)
+        do  
+            fieldName=$(awk 'BEGIN{FS="|"}{if(NR == 1) print $'$i'}' $TableName)
+
+            if [ $i -eq 1 ]
+            then
+                echo "Enter the value of $fieldName field:"
+                read field
+                pK=$field
+                
+                if [ "$pK" != "" ]
+                then
+
+                    if [ "$pK" = "`awk -F "|" '{NF=1; print $'$i'}' $TableName | grep "\b$pK\b"`" ]
+                    then
+                        echo "This Primary key already exists,It has to be not repeated 'unique '"
+                        notValidInsertion=1
+                        break
+                    else
+                        record=$field$fieldSep
+                        continue
+                    fi
+                else
+                    echo "The primary key can't be null"
+                    notValidInsertion=1
+                    break
+                fi
+            else
+                echo "Enter the value of $fieldName field:"
+                read field
+            fi
+            # check if the loop is the last one to prevent the concatenation of separator
+            if [ $i -eq $columnsNo ]
+            then
+                record=$record$field
+            else
+                record=$record$field$fieldSep  
+            fi 
+        done
+
+        if [ $notValidInsertion -ne 1 ]
+        then
+            echo $record >> $TableName 
+            echo "Insertion Done"
+
+            #assign empty value to record variable to hold the new insertion
+            record="" 
+        else
+            echo "Insertion Error"
+        fi
+    else
+        echo "This table doesn't exist"
+    fi
+}
 
 
 
