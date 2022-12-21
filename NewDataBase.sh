@@ -340,6 +340,57 @@ function MainMenu {
     done
 }
 
+function SelectFromTable {
+    echo "Enter the tableName you want to select from:"
+    read TableName
+    isExisted_select=0
+    selectT_arr=(`ls -Al | grep ^-`)
+        for i in $(seq 1 ${#selectT_arr[@]})
+    do  
+        if [ "${selectT_arr[i-1]}" = "$TableName" ]
+        then 
+            isExisted_select=1
+        fi
+        
+    done
+
+    if [ $isExisted_select -eq 1 ]
+    then
+        echo "Choose whether select all or using the table's primary key"
+        select choice in "All" "Using PK" "Back to Connect Menu"
+        do    
+        case $choice in
+            "Select All" ) sed '/*/p' $TableName ;;
+            "Select Using PK" ) echo "Enter the Primary Key value to select your record"
+                        read pk_value
+                        if [ ! -z $pk_value ] 
+                        then
+                            if [ "$pk_value" = "`awk -F "|" '{NF=1; print $1}' $TableName | grep "\b$pk_value\b"`" ]
+                            then
+                                NR=`awk 'BEGIN{FS="|"}{if ($1=="'$pk_value'") print NR}' $TableName`
+                                
+                                echo `awk 'BEGIN{FS="|"}{if (NR==1) print $0}' $TableName`
+                                
+                                sed -n ""$NR"p" $TableName
+
+                            else
+                                echo "This Primary key doesn't exist"
+                            fi
+                        else
+                            echo "The primary key can't be null"
+                        fi    
+            ;;
+            "Back to Connect Menu" )
+              ConnectMenu
+                ;;
+            * ) echo $REPLY is not one of the choices ;;
+        esac
+        done
+    else
+        echo "This table doesn't exist"
+    fi
+}
+
 # change directory to the DB-engine folder, once the script runs
 cd DB-engine
 
